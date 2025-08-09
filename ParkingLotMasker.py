@@ -1,9 +1,15 @@
 import cv2
+import pickle
 
 width = 70
 height = 30
 
-pos_list = []
+# Add info from text file, if there is any
+try:
+    with open('data\\CarParkData', 'rb') as f:
+        pos_list = pickle.load(f)
+except:
+    pos_list = []
 
 # Add a box
 def mouseClick(events, mouseX, mouseY, flags, params) -> None:
@@ -16,6 +22,10 @@ def mouseClick(events, mouseX, mouseY, flags, params) -> None:
             x_pos, y_pos = pos[0], pos[1]
             if x_pos < mouseX < x_pos + width and y_pos < mouseY < y_pos + height:
                 pos_list.pop(i)
+
+    # Add info to text file
+    with open('data\\CarParkData', 'wb') as f:
+        pickle.dump(pos_list, f)
 
 while True:
     # Read a screen and display it
