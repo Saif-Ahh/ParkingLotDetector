@@ -10,6 +10,12 @@ def mouseClick(events, mouseX, mouseY, flags, params) -> None:
     # Add a box
     if events == cv2.EVENT_LBUTTONDOWN:
         pos_list.append((mouseX, mouseY, 0))
+    # Remove a box
+    elif events == cv2.EVENT_RBUTTONDOWN:
+        for i, pos in enumerate(pos_list):
+            x_pos, y_pos = pos[0], pos[1]
+            if x_pos < mouseX < x_pos + width and y_pos < mouseY < y_pos + height:
+                pos_list.pop(i)
 
 while True:
     # Read a screen and display it
