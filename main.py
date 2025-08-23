@@ -32,6 +32,7 @@ while True:
     # Convert scale of image
     img_gray = cv2.cvtColor(parking_lot_img, cv2.COLOR_BGR2GRAY)
     img_blur = cv2.GaussianBlur(img_gray, (3, 3), 1)
+    img_thres = cv2.adaptiveThreshold(img_blur, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 25, 16) # Highlight car in white
     checkParkingSpace()
 
     cv2.imshow('vid', parking_lot_img)
