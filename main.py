@@ -28,6 +28,10 @@ while True:
     success, parking_lot_img = video_capture.read()
     if not success:
         break
+
+    # Convert scale of image
+    img_gray = cv2.cvtColor(parking_lot_img, cv2.COLOR_BGR2GRAY)
+    img_blur = cv2.GaussianBlur(img_gray, (3, 3), 1)
     checkParkingSpace()
 
     cv2.imshow('vid', parking_lot_img)
