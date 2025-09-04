@@ -18,13 +18,18 @@ def checkParkingSpace(process_img) -> None:
         img_crop = process_img[y: y + height, x: x + width]
         count = cv2.countNonZero(img_crop)
         cvzone.putTextRect(parking_lot_img, str(count), (x, y+height-10), scale = 1.3, thickness=1, offset=0)
-        print(count)
 
+        # Color
+        print(count)
+        if count > 600:
+            color = (255, 0, 0)
+        else:
+            color = (0, 255, 0)
         if pos[2] == 0:
-            cv2.rectangle(parking_lot_img, (pos[0], pos[1]), (pos[0] + width, pos[1] + height), (255, 0, 255), 2)
+            cv2.rectangle(parking_lot_img, (pos[0], pos[1]), (pos[0] + width, pos[1] + height), color, 2)
         elif pos[2] == 1:
             cv2.rectangle(parking_lot_img, (pos[0], pos[1]), (pos[0] + width, pos[1] + int(height / 2) + 10),
-                          (255, 0, 255), 2)
+                          color, 2)
 
 # Read video and read info
 video_capture = cv2.VideoCapture('data\\parking_lot_video.mp4')
