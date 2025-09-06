@@ -21,13 +21,17 @@ def checkParkingSpace(process_img) -> None:
 
         # Color
         print(count)
-        if count > 600:
-            color = (255, 0, 0)
-        else:
-            color = (0, 255, 0)
         if pos[2] == 0:
+            if count > 600:
+                color = (255, 0, 0)
+            else:
+                color = (0, 255, 0)
             cv2.rectangle(parking_lot_img, (pos[0], pos[1]), (pos[0] + width, pos[1] + height), color, 2)
         elif pos[2] == 1:
+            if count > 1400:
+                color = (255, 0, 0)
+            else:
+                color = (0, 255, 0)
             cv2.rectangle(parking_lot_img, (pos[0], pos[1]), (pos[0] + width, pos[1] + int(height / 2) + 10),
                           color, 2)
 
