@@ -17,7 +17,7 @@ def checkParkingSpace(process_img) -> None:
         # Crop image
         img_crop = process_img[y: y + height, x: x + width]
         count = cv2.countNonZero(img_crop)
-        cvzone.putTextRect(parking_lot_img, str(count), (x, y+height-10), scale = 1.3, thickness=1, offset=0)
+        cvzone.putTextRect(resize, str(count), (x, y+height-10), scale = 1.3, thickness=1, offset=0)
 
         # Color
         print(count)
@@ -26,13 +26,13 @@ def checkParkingSpace(process_img) -> None:
                 color = (255, 0, 0)
             else:
                 color = (0, 255, 0)
-            cv2.rectangle(parking_lot_img, (pos[0], pos[1]), (pos[0] + width, pos[1] + height), color, 2)
+            cv2.rectangle(resize, (pos[0], pos[1]), (pos[0] + width, pos[1] + height), color, 2)
         elif pos[2] == 1:
             if count > 1400:
                 color = (255, 0, 0)
             else:
                 color = (0, 255, 0)
-            cv2.rectangle(parking_lot_img, (pos[0], pos[1]), (pos[0] + width, pos[1] + int(height / 2) + 10),
+            cv2.rectangle(resize, (pos[0], pos[1]), (pos[0] + width, pos[1] + int(height / 2) + 10),
                           color, 2)
 
 # Read video and read info
@@ -45,8 +45,6 @@ while True:
     if video_capture.get(cv2.CAP_PROP_POS_FRAMES) == video_capture.get(cv2.CAP_PROP_FRAME_COUNT):
         video_capture.set(cv2.CAP_PROP_POS_FRAMES, 0)
     success, parking_lot_img = video_capture.read()
-    if not success:
-        break
 
     # Convert scale of image
     img_gray = cv2.cvtColor(parking_lot_img, cv2.COLOR_BGR2GRAY)
@@ -54,7 +52,13 @@ while True:
     img_thres = cv2.adaptiveThreshold(img_blur, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 25, 16) # Highlight car in white
     img_median = cv2.medianBlur(img_thres, 5)
     img_dialate = cv2.dilate(img_median, np.ones((3,3), np.uint8), iterations=1)
+
+    if success:
+        resize = cv2.resize(parking_lot_img, (1920, 1000))
+        img_dialate = cv2.resize(img_dialate, (1920, 1000))
+    else:
+        break
     checkParkingSpace(img_dialate)
 
-    cv2.imshow('vid', parking_lot_img)
+    cv2.imshow('vid', resize)
     cv2.waitKey(100)
